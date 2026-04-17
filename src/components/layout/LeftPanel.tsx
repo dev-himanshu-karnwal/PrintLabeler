@@ -10,11 +10,10 @@ import { BottomBar } from "./BottomBar";
 type LayoutApiItem = LayoutPreset & { id: string };
 
 type LeftPanelProps = {
-  onPreview: () => void;
   onPrint: () => void;
 };
 
-export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
+export const LeftPanel = ({ onPrint }: LeftPanelProps) => {
   const layout = useEditorStore((state) => state.layout);
   const setLayoutPreset = useEditorStore((state) => state.setLayoutPreset);
   const [layouts, setLayouts] = useState<LayoutApiItem[]>([]);
@@ -75,7 +74,7 @@ export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
         <CellRichTextEditor />
       </div>
       <div className="mt-auto border-t border-slate-200">
-        <BottomBar onPreview={onPreview} onPrint={onPrint} />
+        <BottomBar onPrint={onPrint} />
       </div>
     </aside>
   );

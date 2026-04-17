@@ -44,7 +44,7 @@ export const A4Canvas = ({ zoom }: A4CanvasProps) => {
               isSelected={selectedCellIds.includes(cell.id)}
               widthPx={labelWidthPx}
               heightPx={labelHeightPx}
-              onClick={(multi) => selectCell(cell.id, multi)}
+              onClick={(rangeModifier) => selectCell(cell.id, rangeModifier)}
             />
           ))}
         </div>

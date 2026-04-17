@@ -5,12 +5,54 @@ import { create } from "zustand";
 import type { LabelCell, LabelFormatting } from "@/types/cell";
 import type { LayoutPreset, SheetLayout } from "@/types/layout";
 
+const layoutColumns = (layout: SheetLayout): number => {
+  const config = layout.kind === "preset" ? layout.preset : layout.custom;
+  return config.columns;
+};
+
+const cellIdToIndex = (id: string): number => {
+  const match = /^cell-(\d+)$/.exec(id);
+  return match ? Number(match[1]) : -1;
+};
+
+const cellIdsInRectangularRange = (
+  fromId: string,
+  toId: string,
+  columns: number,
+  cellCount: number
+): string[] => {
+  const fromIdx = cellIdToIndex(fromId);
+  const toIdx = cellIdToIndex(toId);
+  if (fromIdx < 0 || toIdx < 0 || columns <= 0) return [toId];
+
+  const fromRow = Math.floor(fromIdx / columns);
+  const fromCol = fromIdx % columns;
+  const toRow = Math.floor(toIdx / columns);
+  const toCol = toIdx % columns;
+
+  const r0 = Math.min(fromRow, toRow);
+  const r1 = Math.max(fromRow, toRow);
+  const c0 = Math.min(fromCol, toCol);
+  const c1 = Math.max(fromCol, toCol);
+
+  const ids: string[] = [];
+  for (let r = r0; r <= r1; r++) {
+    for (let c = c0; c <= c1; c++) {
+      const idx = r * columns + c;
+      if (idx >= 0 && idx < cellCount) ids.push(`cell-${idx}`);
+    }
+  }
+  return ids.length > 0 ? ids : [toId];
+};
+
 type EditorStore = {
   layout: SheetLayout;
   cells: LabelCell[];
   selectedCellIds: string[];
+  /** Last plain-click cell; Cmd/Ctrl+click extends a rectangle from here. */
+  selectionAnchorId: string | null;
   clipboardCell: LabelCell | null;
-  selectCell: (id: string, multi?: boolean) => void;
+  selectCell: (id: string, rangeModifier?: boolean) => void;
   setLayoutPreset: (preset: LayoutPreset) => void;
   updateCellText: (id: string, value: string) => void;
   updateCellFontSize: (id: string, value: number) => void;
@@ -64,17 +106,38 @@ export const useEditorStore = create<EditorStore>((set) => ({
   layout: seedLayout,
   cells: createCells(seedLayout),
   selectedCellIds: [],
+  selectionAnchorId: null,
   clipboardCell: null,
 
-  selectCell: (id, multi = false) =>
-    set((state) => ({
-      selectedCellIds: multi ? [...new Set([...state.selectedCellIds, id])] : [id],
-    })),
+  selectCell: (id, rangeModifier = false) =>
+    set((state) => {
+      const columns = layoutColumns(state.layout);
+      const cellCount = state.cells.length;
+
+      if (!rangeModifier) {
+        return {
+          selectionAnchorId: id,
+          selectedCellIds: [id],
+        };
+      }
+
+      const anchor =
+        state.selectionAnchorId ?? state.selectedCellIds[0] ?? id;
+      return {
+        selectedCellIds: cellIdsInRectangularRange(anchor, id, columns, cellCount),
+      };
+    }),
 
   setLayoutPreset: (preset) =>
     set((state) => {
       const layout: SheetLayout = { kind: "preset", preset };
-      return { ...state, layout, cells: createCells(layout), selectedCellIds: [] };
+      return {
+        ...state,
+        layout,
+        cells: createCells(layout),
+        selectedCellIds: [],
+        selectionAnchorId: null,
+      };
     }),
 
   updateCellText: (id, value) =>
