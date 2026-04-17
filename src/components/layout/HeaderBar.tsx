@@ -2,6 +2,7 @@
 
 import type { User } from "@supabase/supabase-js";
 import Image from "next/image";
+import Link from "next/link";
 
 type HeaderBarProps = {
   onOpenAuth: () => void;
@@ -29,6 +30,12 @@ export const HeaderBar = ({ onOpenAuth, user, onLogout }: HeaderBarProps) => {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <Link
+          href="/sheet-layouts"
+          className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+        >
+          Sheet Layouts
+        </Link>
         {user ? (
           <>
             <div className="flex items-center gap-2 rounded-xl px-2.5">

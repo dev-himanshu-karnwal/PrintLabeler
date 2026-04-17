@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type LayoutItem = {
   id: string;
@@ -147,10 +148,18 @@ export default function SheetLayoutsPage() {
     <main className="h-screen overflow-hidden bg-linear-to-b from-slate-50 via-indigo-50/40 to-slate-100 px-4 py-4 md:px-8 md:py-5">
       <div className="mx-auto flex h-full max-w-6xl flex-col gap-4">
       <header className="rounded-2xl border border-slate-200/80 bg-white/85 p-5 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.55)] backdrop-blur-sm">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">Admin</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Sheet Layouts</h1>
-          <p className="text-sm text-slate-600">Create, view, and update sheet layouts persisted in Supabase.</p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">Admin</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Sheet Layouts</h1>
+            <p className="text-sm text-slate-600">Create, view, and update sheet layouts persisted in Supabase.</p>
+          </div>
+          <Link
+            href="/"
+            className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+          >
+            Back to editor
+          </Link>
         </div>
       </header>
 
