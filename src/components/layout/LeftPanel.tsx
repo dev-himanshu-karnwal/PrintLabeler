@@ -10,13 +10,11 @@ import { BottomBar } from "./BottomBar";
 type LayoutApiItem = LayoutPreset & { id: string };
 
 type LeftPanelProps = {
-  zoom: number;
-  onZoomChange: (zoom: number) => void;
   onPreview: () => void;
   onPrint: () => void;
 };
 
-export const LeftPanel = ({ zoom, onZoomChange, onPreview, onPrint }: LeftPanelProps) => {
+export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
   const layout = useEditorStore((state) => state.layout);
   const setLayoutPreset = useEditorStore((state) => state.setLayoutPreset);
   const [layouts, setLayouts] = useState<LayoutApiItem[]>([]);
@@ -79,7 +77,7 @@ export const LeftPanel = ({ zoom, onZoomChange, onPreview, onPrint }: LeftPanelP
         </section>
       </div>
       <div className="mt-auto border-t border-indigo-100">
-        <BottomBar zoom={zoom} onZoomChange={onZoomChange} onPreview={onPreview} onPrint={onPrint} />
+        <BottomBar onPreview={onPreview} onPrint={onPrint} />
       </div>
     </aside>
   );

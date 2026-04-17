@@ -14,7 +14,6 @@ import { useEditorStore } from "@/store/editorStore";
 import { TEMPLATE_SCHEMA_VERSION } from "@/types/template";
 
 export default function Home() {
-  const [zoom, setZoom] = useState(0.75);
   const [isPreview, setIsPreview] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -77,7 +76,7 @@ export default function Home() {
   }, [copySelected, pasteToSelected]);
 
   if (isPreview) {
-    return <PreviewMode zoom={zoom} onBack={() => setIsPreview(false)} />;
+    return <PreviewMode zoom={1} onBack={() => setIsPreview(false)} />;
   }
 
   return (
@@ -91,10 +90,10 @@ export default function Home() {
         }}
       />
       <div className="flex min-h-0 flex-1">
-        <LeftPanel zoom={zoom} onZoomChange={setZoom} onPreview={() => setIsPreview(true)} onPrint={printSheet} />
+        <LeftPanel onPreview={() => setIsPreview(true)} onPrint={printSheet} />
         <section className="flex min-h-0 flex-1 flex-col p-4">
           <div ref={printSheetRef} className="print-sheet-root overflow-y-auto">
-            <A4Canvas zoom={zoom} />
+            <A4Canvas zoom={1} />
           </div>
         </section>
       </div>
