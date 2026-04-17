@@ -20,12 +20,18 @@ export const HeaderBar = ({ onOpenAuth, user, onLogout }: HeaderBarProps) => {
     .join("");
 
   return (
-    <header className="flex items-center justify-between border-b border-indigo-100 bg-white/95 px-5 py-3 shadow-sm backdrop-blur">
-      <div className="text-lg font-semibold tracking-tight text-slate-900">PrintLabeler</div>
+    <header className="rounded-2xl border border-slate-200/80 flex items-center justify-between bg-white/85 px-2 py-1">
+      <div className="flex items-center gap-3">
+        <div className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white shadow-sm">PL</div>
+        <div>
+          <p className="text-base font-semibold tracking-tight text-slate-900">PrintLabeler</p>
+          <p className="text-xs text-slate-500">Design and print product labels</p>
+        </div>
+      </div>
       <div className="flex items-center gap-2">
         {user ? (
           <>
-            <div className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-2 py-1">
+            <div className="flex items-center gap-2 rounded-xl px-2.5">
               {avatarUrl ? (
                 <Image src={avatarUrl} alt={displayName} width={32} height={32} className="h-8 w-8 rounded-full object-cover" />
               ) : (
@@ -37,7 +43,7 @@ export const HeaderBar = ({ onOpenAuth, user, onLogout }: HeaderBarProps) => {
               </div>
             </div>
             <button
-              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
               onClick={onLogout}
             >
               Logout
@@ -45,7 +51,7 @@ export const HeaderBar = ({ onOpenAuth, user, onLogout }: HeaderBarProps) => {
           </>
         ) : (
           <button
-            className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-indigo-500"
+            className="rounded-lg bg-indigo-600 px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-indigo-500"
             onClick={onOpenAuth}
           >
             Login

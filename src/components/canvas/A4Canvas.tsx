@@ -24,9 +24,9 @@ export const A4Canvas = ({ zoom }: A4CanvasProps) => {
   const vGapPx = mmToPx(cfg.vGapMm) * zoom;
 
   return (
-    <div className="min-h-0 flex-1 overflow-auto py-4">
+    <div className="min-h-0 flex-1 overflow-auto">
       <div
-        className="print-sheet-page mx-auto overflow-hidden rounded-xl border border-indigo-100 bg-white p-5 shadow-[0_12px_30px_-16px_rgba(15,23,42,0.45)]"
+        className="print-sheet-page mx-auto overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_20px_44px_-24px_rgba(15,23,42,0.55)]"
         style={{ width: widthPx, height: heightPx }}
       >
         <div

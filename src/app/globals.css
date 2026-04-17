@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
 body {
-  background: #eef2ff;
+  background: #f8fafc;
   color: #0f172a;
 }
 
 ::selection {
-  background: #c7d2fe;
-}
-
-.cell-richtext-content .ProseMirror,
-.label-cell-content {
-  line-height: 1;
+  background: #cbd5ff;
 }
 
 .cell-richtext-content .ProseMirror p,

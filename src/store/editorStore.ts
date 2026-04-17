@@ -14,6 +14,7 @@ type EditorStore = {
   setLayoutPreset: (preset: LayoutPreset) => void;
   updateCellText: (id: string, value: string) => void;
   updateCellFontSize: (id: string, value: number) => void;
+  updateCellLineHeight: (id: string, value: LabelFormatting["lineHeight"]) => void;
   copySelected: () => void;
   pasteToSelected: () => void;
 };
@@ -21,6 +22,7 @@ type EditorStore = {
 const DEFAULT_FORMATTING: LabelFormatting = {
   fontFamily: "Arial",
   fontSize: 24,
+  lineHeight: "normal",
   bold: false,
   italic: false,
   underline: false,
@@ -93,6 +95,21 @@ export const useEditorStore = create<EditorStore>((set) => ({
           formatting: {
             ...cell.formatting,
             fontSize: value,
+          },
+        };
+      });
+      return { ...state, cells };
+    }),
+
+  updateCellLineHeight: (id, value) =>
+    set((state) => {
+      const cells = state.cells.map((cell) => {
+        if (cell.id !== id) return cell;
+        return {
+          ...cell,
+          formatting: {
+            ...cell.formatting,
+            lineHeight: value,
           },
         };
       });

@@ -47,12 +47,12 @@ export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
   const selectedCode = layout.kind === "preset" ? layout.preset.code : "";
 
   return (
-    <aside className="flex h-full w-100 shrink-0 flex-col border-r border-indigo-100 bg-white/95 shadow-sm">
+    <aside className="flex h-full w-120 shrink-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.55)]">
       <div className="space-y-4 p-4">
-        <section className="space-y-2">
-        <h2 className="text-sm font-semibold text-slate-900">Sheet Layout</h2>
+        <section className="space-y-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+          <h2 className="text-sm font-semibold text-slate-900">Sheet Layout</h2>
         <select
-          className="w-full rounded-md border border-indigo-100 bg-white px-2.5 py-2 text-sm text-slate-800 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+          className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-800 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
           value={selectedCode}
           onChange={(event) => {
             const selected = layouts.find((item) => item.code === event.target.value);
@@ -74,7 +74,7 @@ export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
 
         <CellRichTextEditor />
       </div>
-      <div className="mt-auto border-t border-indigo-100">
+      <div className="mt-auto border-t border-slate-200">
         <BottomBar onPreview={onPreview} onPrint={onPrint} />
       </div>
     </aside>

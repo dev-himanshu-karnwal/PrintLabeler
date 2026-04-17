@@ -9,6 +9,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 
 import { useEditorStore, useSelectedCell } from "@/store/editorStore";
+import { LINE_HEIGHT_PRESET_ORDER, LINE_HEIGHT_PRESET_VALUES } from "@/types/cell";
 
 import { FormattingToolbar } from "./FormattingToolbar";
 
@@ -17,6 +18,7 @@ export const CellRichTextEditor = () => {
   const selectedCellId = useEditorStore((state) => state.selectedCellIds[0]);
   const updateCellText = useEditorStore((state) => state.updateCellText);
   const updateCellFontSize = useEditorStore((state) => state.updateCellFontSize);
+  const updateCellLineHeight = useEditorStore((state) => state.updateCellLineHeight);
 
   const selectedFontSize = selectedCell?.formatting.fontSize ?? 24;
   const increaseFontSize = () => {
@@ -26,6 +28,13 @@ export const CellRichTextEditor = () => {
   const decreaseFontSize = () => {
     if (!selectedCellId) return;
     updateCellFontSize(selectedCellId, Math.max(8, selectedFontSize - 1));
+  };
+  const selectedLineHeight = selectedCell?.formatting.lineHeight ?? "normal";
+  const toggleLineHeight = () => {
+    if (!selectedCellId) return;
+    const currentIndex = LINE_HEIGHT_PRESET_ORDER.indexOf(selectedLineHeight);
+    const nextIndex = (currentIndex + 1) % LINE_HEIGHT_PRESET_ORDER.length;
+    updateCellLineHeight(selectedCellId, LINE_HEIGHT_PRESET_ORDER[nextIndex]);
   };
 
   const editor = useEditor({
@@ -59,23 +68,28 @@ export const CellRichTextEditor = () => {
 
   if (!selectedCell) {
     return (
-      <div className="rounded-md border border-dashed border-indigo-200 bg-indigo-50/50 p-4 text-sm text-indigo-700">
+      <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 p-4 text-sm text-slate-600">
         Select a label to edit rich text.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-md border border-indigo-100 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_14px_30px_-24px_rgba(15,23,42,0.55)]">
       <FormattingToolbar
         editor={editor}
         fontSize={selectedFontSize}
         onDecreaseFontSize={decreaseFontSize}
         onIncreaseFontSize={increaseFontSize}
+        lineHeightPreset={selectedLineHeight}
+        onToggleLineHeight={toggleLineHeight}
       />
       <EditorContent
-        className="cell-richtext-content min-h-28 p-3 text-slate-800 outline-none"
-        style={{ fontSize: `${selectedFontSize}px`, lineHeight: 1 }}
+        className="cell-richtext-content min-h-28 bg-white p-3 text-slate-800 outline-none"
+        style={{
+          fontSize: `${selectedFontSize}px`,
+          lineHeight: LINE_HEIGHT_PRESET_VALUES[selectedLineHeight],
+        }}
         editor={editor}
       />
     </div>

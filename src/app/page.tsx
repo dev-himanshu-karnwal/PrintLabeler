@@ -33,7 +33,7 @@ export default function Home() {
       cells,
       updatedAt: new Date().toISOString(),
     }),
-    [layout, cells],
+    [layout, cells]
   );
   const printSheet = usePrintSheet({ contentRef: printSheetRef });
 
@@ -57,7 +57,10 @@ export default function Home() {
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      localStorage.setItem("printlabeler_autosave", JSON.stringify(templatePayload));
+      localStorage.setItem(
+        "printlabeler_autosave",
+        JSON.stringify(templatePayload)
+      );
     }, 30000);
     return () => window.clearTimeout(timer);
   }, [templatePayload]);
@@ -80,24 +83,34 @@ export default function Home() {
   }
 
   return (
-    <main className="flex h-screen flex-col bg-linear-to-br from-indigo-50 via-slate-50 to-indigo-100">
-      <HeaderBar
-        onOpenAuth={() => setShowAuth(true)}
-        user={user}
-        onLogout={() => {
-          if (!supabase) return;
-          void supabase.auth.signOut();
-        }}
-      />
-      <div className="flex min-h-0 flex-1">
+    <main className="flex h-screen flex-col bg-linear-to-b from-slate-50 via-indigo-50/40 to-slate-100 text-slate-900">
+      <div className="px-4 py-3">
+        <HeaderBar
+          onOpenAuth={() => setShowAuth(true)}
+          user={user}
+          onLogout={() => {
+            if (!supabase) return;
+            void supabase.auth.signOut();
+          }}
+        />
+      </div>
+      <div className="flex min-h-0 flex-1 px-4 pb-4">
         <LeftPanel onPreview={() => setIsPreview(true)} onPrint={printSheet} />
-        <section className="flex min-h-0 flex-1 flex-col p-4">
-          <div ref={printSheetRef} className="print-sheet-root overflow-y-auto">
+        <section className="ml-4 flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div
+            ref={printSheetRef}
+            className="print-sheet-root h-full overflow-y-auto rounded-xl"
+          >
             <A4Canvas zoom={1} />
           </div>
         </section>
       </div>
-      {showAuth && <AuthDialog onClose={() => setShowAuth(false)} onAuthSuccess={() => setShowAuth(false)} />}
+      {showAuth && (
+        <AuthDialog
+          onClose={() => setShowAuth(false)}
+          onAuthSuccess={() => setShowAuth(false)}
+        />
+      )}
     </main>
   );
 }

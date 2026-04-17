@@ -7,6 +7,8 @@ type FormattingToolbarProps = {
   fontSize: number;
   onDecreaseFontSize: () => void;
   onIncreaseFontSize: () => void;
+  lineHeightPreset: string;
+  onToggleLineHeight: () => void;
 };
 
 export const FormattingToolbar = ({
@@ -14,12 +16,16 @@ export const FormattingToolbar = ({
   fontSize,
   onDecreaseFontSize,
   onIncreaseFontSize,
+  lineHeightPreset,
+  onToggleLineHeight,
 }: FormattingToolbarProps) => {
   if (!editor) return null;
 
   const baseButtonClass =
-    "flex h-8 w-8 items-center justify-center rounded-md border border-indigo-200 bg-white text-slate-700 transition hover:bg-indigo-50";
-  const activeButtonClass = "border-indigo-400 bg-indigo-100 text-indigo-700";
+    "flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-100";
+  const textButtonClass =
+    "inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-2 text-[11px] font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-100";
+  const activeButtonClass = "border-indigo-300 bg-indigo-50 text-indigo-700";
 
   const currentAlignment = editor.isActive({ textAlign: "center" })
     ? "center"
@@ -45,7 +51,7 @@ export const FormattingToolbar = ({
     );
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-indigo-100 bg-indigo-50/60 p-2 text-xs">
+    <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 p-2 text-xs">
       <button
         aria-label="Decrease font size"
         className={baseButtonClass}
@@ -54,7 +60,7 @@ export const FormattingToolbar = ({
       >
         A-
       </button>
-      <span className="min-w-10 text-center text-[11px] font-medium text-slate-600">{fontSize}px</span>
+      <span className="text-center text-[11px] font-medium text-slate-600">{fontSize}px</span>
       <button
         aria-label="Increase font size"
         className={baseButtonClass}
@@ -62,6 +68,14 @@ export const FormattingToolbar = ({
         type="button"
       >
         A+
+      </button>
+      <button
+        aria-label={`Line height ${lineHeightPreset}. Click to toggle next option.`}
+        className={textButtonClass}
+        onClick={onToggleLineHeight}
+        type="button"
+      >
+        LH: {lineHeightPreset}
       </button>
       <button
         aria-label="Toggle bold"
