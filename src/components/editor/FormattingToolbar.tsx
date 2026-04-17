@@ -53,31 +53,6 @@ export const FormattingToolbar = ({
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 p-2 text-xs">
       <button
-        aria-label="Decrease font size"
-        className={baseButtonClass}
-        onClick={onDecreaseFontSize}
-        type="button"
-      >
-        A-
-      </button>
-      <span className="text-center text-[11px] font-medium text-slate-600">{fontSize}px</span>
-      <button
-        aria-label="Increase font size"
-        className={baseButtonClass}
-        onClick={onIncreaseFontSize}
-        type="button"
-      >
-        A+
-      </button>
-      <button
-        aria-label={`Line height ${lineHeightPreset}. Click to toggle next option.`}
-        className={textButtonClass}
-        onClick={onToggleLineHeight}
-        type="button"
-      >
-        LH: {lineHeightPreset}
-      </button>
-      <button
         aria-label="Toggle bold"
         className={`${baseButtonClass} ${editor.isActive("bold") ? activeButtonClass : ""}`}
         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -114,6 +89,32 @@ export const FormattingToolbar = ({
         type="button"
       >
         {alignmentIcon}
+      </button>
+      <div className="w-1"></div>
+      <button
+        aria-label="Decrease font size"
+        className={baseButtonClass}
+        onClick={onDecreaseFontSize}
+        type="button"
+      >
+        A-
+      </button>
+      <span className="text-center text-[11px] font-medium text-slate-600">{fontSize}px</span>
+      <button
+        aria-label="Increase font size"
+        className={baseButtonClass}
+        onClick={onIncreaseFontSize}
+        type="button"
+      >
+        A+
+      </button>
+      <button
+        aria-label={`Line height ${lineHeightPreset}. Click to toggle next option.`}
+        className={textButtonClass}
+        onClick={onToggleLineHeight}
+        type="button"
+      >
+        LH: {lineHeightPreset}
       </button>
     </div>
   );
