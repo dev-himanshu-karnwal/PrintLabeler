@@ -2,9 +2,8 @@
 
 import { create } from "zustand";
 
-import { LAYOUT_PRESETS } from "@/lib/layoutPresets";
 import type { LabelCell, LabelFormatting } from "@/types/cell";
-import type { SheetLayout } from "@/types/layout";
+import type { LayoutPreset, SheetLayout } from "@/types/layout";
 
 type EditorStore = {
   layout: SheetLayout;
@@ -12,7 +11,7 @@ type EditorStore = {
   selectedCellIds: string[];
   clipboardCell: LabelCell | null;
   selectCell: (id: string, multi?: boolean) => void;
-  setLayoutPreset: (code: string) => void;
+  setLayoutPreset: (preset: LayoutPreset) => void;
   updateCellText: (id: string, value: string) => void;
   copySelected: () => void;
   pasteToSelected: () => void;
@@ -37,7 +36,18 @@ const createCells = (layout: SheetLayout): LabelCell[] => {
   }));
 };
 
-const seedLayout: SheetLayout = { kind: "preset", preset: LAYOUT_PRESETS[8] };
+const seedLayout: SheetLayout = {
+  kind: "custom",
+  custom: {
+    rows: 1,
+    columns: 1,
+    labelWidthMm: 210,
+    labelHeightMm: 297,
+    hGapMm: 0,
+    vGapMm: 0,
+    marginMm: 0,
+  },
+};
 
 const applyTemplate = (source: LabelCell, target: LabelCell): LabelCell => {
   return {
@@ -58,9 +68,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
       selectedCellIds: multi ? [...new Set([...state.selectedCellIds, id])] : [id],
     })),
 
-  setLayoutPreset: (code) =>
+  setLayoutPreset: (preset) =>
     set((state) => {
-      const preset = LAYOUT_PRESETS.find((item) => item.code === code) ?? LAYOUT_PRESETS[0];
       const layout: SheetLayout = { kind: "preset", preset };
       return { ...state, layout, cells: createCells(layout), selectedCellIds: [] };
     }),
