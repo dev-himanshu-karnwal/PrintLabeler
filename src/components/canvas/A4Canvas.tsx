@@ -26,7 +26,7 @@ export const A4Canvas = ({ zoom }: A4CanvasProps) => {
   return (
     <div className="min-h-0 flex-1 overflow-auto py-4">
       <div
-        className="mx-auto overflow-hidden rounded-xl border border-indigo-100 bg-white p-5 shadow-[0_12px_30px_-16px_rgba(15,23,42,0.45)]"
+        className="print-sheet-page mx-auto overflow-hidden rounded-xl border border-indigo-100 bg-white p-5 shadow-[0_12px_30px_-16px_rgba(15,23,42,0.45)]"
         style={{ width: widthPx, height: heightPx }}
       >
         <div

@@ -10,7 +10,6 @@ import StarterKit from "@tiptap/starter-kit";
 
 import { useEditorStore, useSelectedCell } from "@/store/editorStore";
 
-import { FontSize } from "./FontSize";
 import { FormattingToolbar } from "./FormattingToolbar";
 
 export const CellRichTextEditor = () => {
@@ -18,7 +17,7 @@ export const CellRichTextEditor = () => {
   const updateCellText = useEditorStore((state) => state.updateCellText);
 
   const editor = useEditor({
-    extensions: [StarterKit, TextStyle, Color, Underline, FontFamily, FontSize, TextAlign.configure({ types: ["paragraph"] })],
+    extensions: [StarterKit, TextStyle, Color, Underline, FontFamily, TextAlign.configure({ types: ["paragraph"] })],
     content: selectedCell?.richText ?? "",
     immediatelyRender: false,
     onUpdate: ({ editor: current }) => {

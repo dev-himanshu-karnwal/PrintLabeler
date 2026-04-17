@@ -25,4 +25,23 @@ body {
   select {
     display: none !important;
   }
+
+  .print-sheet-root button {
+    display: block !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .print-sheet-root .print-sheet-page {
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-sheet-root,
+  .print-sheet-root * {
+    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
 }

@@ -19,7 +19,6 @@ type EditorStore = {
 
 const DEFAULT_FORMATTING: LabelFormatting = {
   fontFamily: "Arial",
-  fontSizePt: 12,
   bold: false,
   italic: false,
   underline: false,

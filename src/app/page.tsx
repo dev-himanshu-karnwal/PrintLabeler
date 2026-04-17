@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { A4Canvas } from "@/components/canvas/A4Canvas";
@@ -10,7 +10,7 @@ import { BottomBar } from "@/components/layout/BottomBar";
 import { HeaderBar } from "@/components/layout/HeaderBar";
 import { LeftPanel } from "@/components/layout/LeftPanel";
 import { PreviewMode } from "@/components/preview/PreviewMode";
-import { printSheet } from "@/lib/print";
+import { usePrintSheet } from "@/lib/print";
 import { supabase } from "@/lib/supabase";
 import { useEditorStore } from "@/store/editorStore";
 import { TEMPLATE_SCHEMA_VERSION } from "@/types/template";
@@ -20,6 +20,7 @@ export default function Home() {
   const [isPreview, setIsPreview] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const printSheetRef = useRef<HTMLDivElement>(null);
 
   const layout = useEditorStore((state) => state.layout);
   const cells = useEditorStore((state) => state.cells);
@@ -37,6 +38,7 @@ export default function Home() {
     }),
     [layout, cells],
   );
+  const printSheet = usePrintSheet({ contentRef: printSheetRef });
 
   useEffect(() => {
     if (!supabase) return;
@@ -96,7 +98,9 @@ export default function Home() {
           <div className="rounded-xl border border-indigo-100 bg-white/90 p-4 shadow-sm backdrop-blur">
             <CellRichTextEditor />
           </div>
-          <A4Canvas zoom={zoom} />
+          <div ref={printSheetRef} className="print-sheet-root overflow-y-auto">
+            <A4Canvas zoom={zoom} />
+          </div>
         </section>
       </div>
       <BottomBar zoom={zoom} onZoomChange={setZoom} onPreview={() => setIsPreview(true)} onPrint={printSheet} />
