@@ -70,6 +70,13 @@ const EMPTY_FORM: LayoutForm = {
   marginMm: 0,
 };
 
+const FORM_SECTIONS: Array<{ title: string; fields: Array<keyof LayoutForm> }> = [
+  { title: "Identity", fields: ["code", "labelsPerSheet"] },
+  { title: "Label Size", fields: ["labelWidthMm", "labelHeightMm"] },
+  { title: "Grid", fields: ["rows", "columns"] },
+  { title: "Spacing", fields: ["hGapMm", "vGapMm", "marginMm"] },
+];
+
 export default function SheetLayoutsPage() {
   const [layouts, setLayouts] = useState<LayoutItem[]>([]);
   const [form, setForm] = useState<LayoutForm>(EMPTY_FORM);
@@ -137,102 +144,140 @@ export default function SheetLayoutsPage() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl space-y-6 p-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold text-slate-900">Sheet Layouts</h1>
-        <p className="text-sm text-slate-600">Create, view, and update sheet layouts persisted in Supabase.</p>
+    <main className="h-screen overflow-hidden bg-linear-to-b from-slate-50 via-indigo-50/40 to-slate-100 px-4 py-4 md:px-8 md:py-5">
+      <div className="mx-auto flex h-full max-w-6xl flex-col gap-4">
+      <header className="rounded-2xl border border-slate-200/80 bg-white/85 p-5 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.55)] backdrop-blur-sm">
+        <div className="space-y-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">Admin</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Sheet Layouts</h1>
+          <p className="text-sm text-slate-600">Create, view, and update sheet layouts persisted in Supabase.</p>
+        </div>
       </header>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-semibold text-slate-900">{actionLabel}</h2>
-        <form className="grid grid-cols-2 gap-3 md:grid-cols-5" onSubmit={onSubmit}>
-          {Object.entries(form).map(([key, value]) => {
-            const field = key as keyof LayoutForm;
-            const meta = FIELD_META[field];
-            return (
-            <label key={key} className="space-y-1 text-xs font-medium text-slate-700">
-              <span>{meta.label}</span>
-              <p className="text-[11px] font-normal text-slate-500">{meta.description}</p>
-              <input
-                className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
-                type={key === "code" ? "text" : "number"}
-                value={value}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    [key]: key === "code" ? event.target.value : Number(event.target.value),
-                  }))
-                }
-                required
-              />
-            </label>
-          )})}
-          <div className="col-span-2 flex items-end gap-2 md:col-span-5">
-            <button
-              type="submit"
-              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500"
-            >
-              {actionLabel}
-            </button>
-            {editingId && (
+      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[1fr_320px]">
+        <section className="min-h-0 overflow-y-auto rounded-2xl border border-slate-200/80 bg-white/90 px-5 pt-5 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.55)]">
+          <h2 className="mb-4 text-sm font-semibold text-slate-900">{actionLabel}</h2>
+          <form className="space-y-4" onSubmit={onSubmit}>
+            {FORM_SECTIONS.map((section) => (
+              <div key={section.title} className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+                <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-slate-600">{section.title}</h3>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {section.fields.map((field) => {
+                    const value = form[field];
+                    const meta = FIELD_META[field];
+                    const isCodeField = field === "code";
+                    return (
+                      <label
+                        key={field}
+                        className={`space-y-1.5 rounded-lg border border-slate-200 bg-white p-2.5 text-xs font-medium text-slate-700 ${
+                          isCodeField ? "sm:col-span-2 lg:col-span-2" : ""
+                        }`}
+                      >
+                        <span>{meta.label}</span>
+                        <p className="text-[11px] font-normal text-slate-500">{meta.description}</p>
+                        <input
+                          className="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+                          type={field === "code" ? "text" : "number"}
+                          value={value}
+                          onChange={(event) =>
+                            setForm((current) => ({
+                              ...current,
+                              [field]: field === "code" ? event.target.value : Number(event.target.value),
+                            }))
+                          }
+                          required
+                        />
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            <div className="sticky bottom-0 z-10 mt-2 flex flex-wrap items-center gap-2 border-t border-slate-200 bg-white/95 pb-1 pt-2 backdrop-blur-sm">
               <button
-                type="button"
-                className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-                onClick={() => {
-                  setEditingId(null);
-                  setForm(EMPTY_FORM);
-                }}
+                type="submit"
+                className="rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-indigo-500"
               >
-                Cancel edit
+                {actionLabel}
               </button>
-            )}
-          </div>
-        </form>
-        {message && <p className="mt-3 text-sm text-slate-700">{message}</p>}
-      </section>
-
-      <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-semibold text-slate-900">All layouts</h2>
-        {isLoading ? (
-          <p className="text-sm text-slate-600">Loading layouts...</p>
-        ) : layouts.length === 0 ? (
-          <p className="text-sm text-slate-600">No layouts found in database.</p>
-        ) : (
-          <div className="space-y-2">
-            {layouts.map((layout) => (
-              <article
-                key={layout.id}
-                className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2"
-              >
-                <p className="text-sm text-slate-800">
-                  {layout.code}: {layout.labelsPerSheet} labels ({layout.labelWidthMm}x{layout.labelHeightMm}mm),{" "}
-                  {layout.rows}x{layout.columns}
-                </p>
+              {editingId && (
                 <button
                   type="button"
-                  className="rounded-md border border-slate-300 px-2 py-1 text-xs"
+                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
                   onClick={() => {
-                    setEditingId(layout.id);
-                    setForm({
-                      code: layout.code,
-                      labelsPerSheet: layout.labelsPerSheet,
-                      labelWidthMm: layout.labelWidthMm,
-                      labelHeightMm: layout.labelHeightMm,
-                      rows: layout.rows,
-                      columns: layout.columns,
-                      hGapMm: layout.hGapMm,
-                      vGapMm: layout.vGapMm,
-                      marginMm: layout.marginMm,
-                    });
+                    setEditingId(null);
+                    setForm(EMPTY_FORM);
                   }}
                 >
-                  Edit
+                  Cancel edit
                 </button>
-              </article>
-            ))}
+              )}
+            </div>
+          </form>
+          {message && <p className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">{message}</p>}
+        </section>
+
+        <aside className="min-h-0 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.55)]">
+          <div className="mb-3 flex items-center justify-between gap-2 border-b border-slate-200 pb-3">
+            <h2 className="text-sm font-semibold text-slate-900">Layouts</h2>
+            <button
+              type="button"
+              className="rounded-lg bg-indigo-600 px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-500"
+              onClick={() => {
+                setEditingId(null);
+                setForm(EMPTY_FORM);
+              }}
+            >
+              + Create new
+            </button>
           </div>
-        )}
-      </section>
+          <div className="h-[calc(100%-3.25rem)] space-y-2 overflow-y-auto pr-1">
+            {isLoading ? (
+              <p className="text-sm text-slate-600">Loading layouts...</p>
+            ) : layouts.length === 0 ? (
+              <p className="text-sm text-slate-600">No layouts found in database.</p>
+            ) : (
+              layouts.map((layout) => {
+                const isActive = editingId === layout.id;
+                return (
+                  <button
+                    key={layout.id}
+                    type="button"
+                    className={`w-full rounded-xl border px-3 py-2 text-left transition ${
+                      isActive
+                        ? "border-indigo-300 bg-indigo-50 text-indigo-900 shadow-[0_0_0_1px_rgba(99,102,241,0.25)]"
+                        : "border-slate-200 bg-slate-50/70 text-slate-800 hover:border-slate-300 hover:bg-slate-100"
+                    }`}
+                    onClick={() => {
+                      setEditingId(layout.id);
+                      setForm({
+                        code: layout.code,
+                        labelsPerSheet: layout.labelsPerSheet,
+                        labelWidthMm: layout.labelWidthMm,
+                        labelHeightMm: layout.labelHeightMm,
+                        rows: layout.rows,
+                        columns: layout.columns,
+                        hGapMm: layout.hGapMm,
+                        vGapMm: layout.vGapMm,
+                        marginMm: layout.marginMm,
+                      });
+                    }}
+                  >
+                    <p className="text-sm font-semibold">{layout.code}</p>
+                    <p className="mt-1 text-xs text-slate-600">
+                      {layout.labelsPerSheet} labels • {layout.labelWidthMm}x{layout.labelHeightMm}mm
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      Grid {layout.rows}x{layout.columns} • Gap {layout.hGapMm}/{layout.vGapMm}mm
+                    </p>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </aside>
+      </div>
+      </div>
     </main>
   );
 }
