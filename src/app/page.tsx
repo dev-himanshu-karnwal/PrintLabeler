@@ -5,8 +5,6 @@ import type { User } from "@supabase/supabase-js";
 
 import { A4Canvas } from "@/components/canvas/A4Canvas";
 import { AuthDialog } from "@/components/auth/AuthDialog";
-import { CellRichTextEditor } from "@/components/editor/CellRichTextEditor";
-import { BottomBar } from "@/components/layout/BottomBar";
 import { HeaderBar } from "@/components/layout/HeaderBar";
 import { LeftPanel } from "@/components/layout/LeftPanel";
 import { PreviewMode } from "@/components/preview/PreviewMode";
@@ -93,17 +91,13 @@ export default function Home() {
         }}
       />
       <div className="flex min-h-0 flex-1">
-        <LeftPanel />
+        <LeftPanel zoom={zoom} onZoomChange={setZoom} onPreview={() => setIsPreview(true)} onPrint={printSheet} />
         <section className="flex min-h-0 flex-1 flex-col p-4">
-          <div className="rounded-xl border border-indigo-100 bg-white/90 p-4 shadow-sm backdrop-blur">
-            <CellRichTextEditor />
-          </div>
           <div ref={printSheetRef} className="print-sheet-root overflow-y-auto">
             <A4Canvas zoom={zoom} />
           </div>
         </section>
       </div>
-      <BottomBar zoom={zoom} onZoomChange={setZoom} onPreview={() => setIsPreview(true)} onPrint={printSheet} />
       {showAuth && <AuthDialog onClose={() => setShowAuth(false)} onAuthSuccess={() => setShowAuth(false)} />}
     </main>
   );
