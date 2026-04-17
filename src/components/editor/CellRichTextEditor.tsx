@@ -40,6 +40,13 @@ export const CellRichTextEditor = () => {
     }
   }, [editor, selectedCellId, selectedCell?.richText]);
 
+  useEffect(() => {
+    if (!editor || !selectedCellId) return;
+
+    // Move focus into the rich-text editor whenever a cell is selected.
+    editor.commands.focus("end");
+  }, [editor, selectedCellId]);
+
   if (!selectedCell) {
     return (
       <div className="rounded-md border border-dashed border-indigo-200 bg-indigo-50/50 p-4 text-sm text-indigo-700">

@@ -47,7 +47,7 @@ export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
   const selectedCode = layout.kind === "preset" ? layout.preset.code : "";
 
   return (
-    <aside className="flex h-full w-80 shrink-0 flex-col border-r border-indigo-100 bg-white/95 shadow-sm">
+    <aside className="flex h-full w-100 shrink-0 flex-col border-r border-indigo-100 bg-white/95 shadow-sm">
       <div className="space-y-4 p-4">
         <section className="space-y-2">
         <h2 className="text-sm font-semibold text-slate-900">Sheet Layout</h2>
@@ -72,9 +72,7 @@ export const LeftPanel = ({ onPreview, onPrint }: LeftPanelProps) => {
         )}
         </section>
 
-        <section className="rounded-xl border border-indigo-100 bg-white/90 p-3 shadow-sm backdrop-blur">
-          <CellRichTextEditor />
-        </section>
+        <CellRichTextEditor />
       </div>
       <div className="mt-auto border-t border-indigo-100">
         <BottomBar onPreview={onPreview} onPrint={onPrint} />

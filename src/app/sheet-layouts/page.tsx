@@ -19,6 +19,45 @@ type LayoutItem = {
 
 type LayoutForm = Omit<LayoutItem, "id" | "createdAt" | "updatedAt">;
 
+const FIELD_META: Record<keyof LayoutForm, { label: string; description: string }> = {
+  code: {
+    label: "Code",
+    description: "Unique name for this layout (example: A4-24).",
+  },
+  labelsPerSheet: {
+    label: "Labels per sheet",
+    description: "Total labels printed from one full sheet.",
+  },
+  labelWidthMm: {
+    label: "Label width (mm)",
+    description: "Width of a single label in millimeters.",
+  },
+  labelHeightMm: {
+    label: "Label height (mm)",
+    description: "Height of a single label in millimeters.",
+  },
+  rows: {
+    label: "Rows",
+    description: "How many label rows are on the sheet.",
+  },
+  columns: {
+    label: "Columns",
+    description: "How many label columns are on the sheet.",
+  },
+  hGapMm: {
+    label: "Horizontal gap (mm)",
+    description: "Space between labels from left to right.",
+  },
+  vGapMm: {
+    label: "Vertical gap (mm)",
+    description: "Space between labels from top to bottom.",
+  },
+  marginMm: {
+    label: "Margin (mm)",
+    description: "Outer page margin around all labels.",
+  },
+};
+
 const EMPTY_FORM: LayoutForm = {
   code: "",
   labelsPerSheet: 1,
@@ -88,9 +127,12 @@ export default function SheetLayoutsPage() {
       return;
     }
 
-    setMessage(editingId ? "Layout updated." : "Layout created.");
-    setForm(EMPTY_FORM);
-    setEditingId(null);
+    const isEditing = Boolean(editingId);
+    setMessage(isEditing ? "Layout updated." : "Layout created.");
+    if (!isEditing) {
+      setForm(EMPTY_FORM);
+      setEditingId(null);
+    }
     await loadLayouts();
   };
 
@@ -104,9 +146,13 @@ export default function SheetLayoutsPage() {
       <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <h2 className="mb-3 text-sm font-semibold text-slate-900">{actionLabel}</h2>
         <form className="grid grid-cols-2 gap-3 md:grid-cols-5" onSubmit={onSubmit}>
-          {Object.entries(form).map(([key, value]) => (
+          {Object.entries(form).map(([key, value]) => {
+            const field = key as keyof LayoutForm;
+            const meta = FIELD_META[field];
+            return (
             <label key={key} className="space-y-1 text-xs font-medium text-slate-700">
-              <span>{key}</span>
+              <span>{meta.label}</span>
+              <p className="text-[11px] font-normal text-slate-500">{meta.description}</p>
               <input
                 className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
                 type={key === "code" ? "text" : "number"}
@@ -120,7 +166,7 @@ export default function SheetLayoutsPage() {
                 required
               />
             </label>
-          ))}
+          )})}
           <div className="col-span-2 flex items-end gap-2 md:col-span-5">
             <button
               type="submit"
