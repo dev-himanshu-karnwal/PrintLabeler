@@ -9,6 +9,16 @@ body {
   background: #c7d2fe;
 }
 
+.cell-richtext-content .ProseMirror,
+.label-cell-content {
+  line-height: 1;
+}
+
+.cell-richtext-content .ProseMirror p,
+.label-cell-content p {
+  margin: 0;
+}
+
 @media print {
   @page {
     size: A4;

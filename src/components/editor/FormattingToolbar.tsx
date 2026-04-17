@@ -4,9 +4,17 @@ import type { Editor } from "@tiptap/react";
 
 type FormattingToolbarProps = {
   editor: Editor | null;
+  fontSize: number;
+  onDecreaseFontSize: () => void;
+  onIncreaseFontSize: () => void;
 };
 
-export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
+export const FormattingToolbar = ({
+  editor,
+  fontSize,
+  onDecreaseFontSize,
+  onIncreaseFontSize,
+}: FormattingToolbarProps) => {
   if (!editor) return null;
 
   const baseButtonClass =
@@ -38,6 +46,23 @@ export const FormattingToolbar = ({ editor }: FormattingToolbarProps) => {
 
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-indigo-100 bg-indigo-50/60 p-2 text-xs">
+      <button
+        aria-label="Decrease font size"
+        className={baseButtonClass}
+        onClick={onDecreaseFontSize}
+        type="button"
+      >
+        A-
+      </button>
+      <span className="min-w-10 text-center text-[11px] font-medium text-slate-600">{fontSize}px</span>
+      <button
+        aria-label="Increase font size"
+        className={baseButtonClass}
+        onClick={onIncreaseFontSize}
+        type="button"
+      >
+        A+
+      </button>
       <button
         aria-label="Toggle bold"
         className={`${baseButtonClass} ${editor.isActive("bold") ? activeButtonClass : ""}`}

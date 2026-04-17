@@ -13,12 +13,14 @@ type EditorStore = {
   selectCell: (id: string, multi?: boolean) => void;
   setLayoutPreset: (preset: LayoutPreset) => void;
   updateCellText: (id: string, value: string) => void;
+  updateCellFontSize: (id: string, value: number) => void;
   copySelected: () => void;
   pasteToSelected: () => void;
 };
 
 const DEFAULT_FORMATTING: LabelFormatting = {
   fontFamily: "Arial",
+  fontSize: 24,
   bold: false,
   italic: false,
   underline: false,
@@ -78,6 +80,21 @@ export const useEditorStore = create<EditorStore>((set) => ({
       const cells = state.cells.map((cell) => {
         if (cell.id !== id) return cell;
         return { ...cell, richText: value };
+      });
+      return { ...state, cells };
+    }),
+
+  updateCellFontSize: (id, value) =>
+    set((state) => {
+      const cells = state.cells.map((cell) => {
+        if (cell.id !== id) return cell;
+        return {
+          ...cell,
+          formatting: {
+            ...cell.formatting,
+            fontSize: value,
+          },
+        };
       });
       return { ...state, cells };
     }),

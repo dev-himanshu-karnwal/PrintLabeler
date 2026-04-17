@@ -1,7 +1,6 @@
 "use client";
 
 import Color from "@tiptap/extension-color";
-import FontFamily from "@tiptap/extension-font-family";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
@@ -17,9 +16,20 @@ export const CellRichTextEditor = () => {
   const selectedCell = useSelectedCell();
   const selectedCellId = useEditorStore((state) => state.selectedCellIds[0]);
   const updateCellText = useEditorStore((state) => state.updateCellText);
+  const updateCellFontSize = useEditorStore((state) => state.updateCellFontSize);
+
+  const selectedFontSize = selectedCell?.formatting.fontSize ?? 24;
+  const increaseFontSize = () => {
+    if (!selectedCellId) return;
+    updateCellFontSize(selectedCellId, Math.min(72, selectedFontSize + 1));
+  };
+  const decreaseFontSize = () => {
+    if (!selectedCellId) return;
+    updateCellFontSize(selectedCellId, Math.max(8, selectedFontSize - 1));
+  };
 
   const editor = useEditor({
-    extensions: [StarterKit, TextStyle, Color, Underline, FontFamily, TextAlign.configure({ types: ["paragraph"] })],
+    extensions: [StarterKit, TextStyle, Color, Underline, TextAlign.configure({ types: ["paragraph"] })],
     content: selectedCell?.richText ?? "",
     immediatelyRender: false,
     onUpdate: ({ editor: current }) => {
@@ -57,8 +67,17 @@ export const CellRichTextEditor = () => {
 
   return (
     <div className="overflow-hidden rounded-md border border-indigo-100 bg-white shadow-sm">
-      <FormattingToolbar editor={editor} />
-      <EditorContent className="min-h-28 p-3 text-sm text-slate-800 outline-none" editor={editor} />
+      <FormattingToolbar
+        editor={editor}
+        fontSize={selectedFontSize}
+        onDecreaseFontSize={decreaseFontSize}
+        onIncreaseFontSize={increaseFontSize}
+      />
+      <EditorContent
+        className="cell-richtext-content min-h-28 p-3 text-slate-800 outline-none"
+        style={{ fontSize: `${selectedFontSize}px`, lineHeight: 1 }}
+        editor={editor}
+      />
     </div>
   );
 };

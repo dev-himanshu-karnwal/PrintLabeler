@@ -18,9 +18,11 @@ type LabelCellProps = {
       onClick={(event) => onClick(event.shiftKey || event.metaKey || event.ctrlKey)}
     >
       <div
-        className="h-full overflow-hidden whitespace-pre-wrap wrap-break-word"
+        className="label-cell-content h-full overflow-hidden whitespace-pre-wrap wrap-break-word"
         style={{
           fontFamily: cell.formatting.fontFamily,
+          fontSize: `${cell.formatting.fontSize}px`,
+          lineHeight: 1,
           fontWeight: cell.formatting.bold ? 700 : 400,
           fontStyle: cell.formatting.italic ? "italic" : "normal",
           textDecoration: cell.formatting.underline ? "underline" : "none",
