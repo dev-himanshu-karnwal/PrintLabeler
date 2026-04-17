@@ -7,6 +7,7 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
 
 import { useEditorStore, useSelectedCell } from "@/store/editorStore";
 
@@ -14,6 +15,7 @@ import { FormattingToolbar } from "./FormattingToolbar";
 
 export const CellRichTextEditor = () => {
   const selectedCell = useSelectedCell();
+  const selectedCellId = useEditorStore((state) => state.selectedCellIds[0]);
   const updateCellText = useEditorStore((state) => state.updateCellText);
 
   const editor = useEditor({
@@ -21,11 +23,22 @@ export const CellRichTextEditor = () => {
     content: selectedCell?.richText ?? "",
     immediatelyRender: false,
     onUpdate: ({ editor: current }) => {
-      if (selectedCell) {
-        updateCellText(selectedCell.id, current.getHTML());
+      const activeCellId = useEditorStore.getState().selectedCellIds[0];
+      if (activeCellId) {
+        updateCellText(activeCellId, current.getHTML());
       }
     },
   });
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const nextValue = selectedCell?.richText ?? "";
+    if (editor.getHTML() !== nextValue) {
+      // Keep editor view in sync when selection changes without re-triggering onUpdate.
+      editor.commands.setContent(nextValue, { emitUpdate: false });
+    }
+  }, [editor, selectedCellId, selectedCell?.richText]);
 
   if (!selectedCell) {
     return (
