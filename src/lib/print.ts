@@ -1,22 +1,37 @@
-import type { RefObject } from "react";
+import { useMemo, type RefObject } from "react";
 import { useReactToPrint } from "react-to-print";
 
-export const showPrintAdvisory = (): boolean => {
-  return window.confirm("Set Scale to 100% (Actual Size) and Paper Size to A4 for accurate label alignment.");
+type PrintMarginsMm = {
+  marginMmTop: number;
+  marginMmRight: number;
+  marginMmBottom: number;
+  marginMmLeft: number;
 };
 
 type UsePrintSheetOptions = {
   contentRef: RefObject<HTMLDivElement | null>;
-};
+} & PrintMarginsMm;
 
-export const usePrintSheet = ({ contentRef }: UsePrintSheetOptions): (() => void) => {
-  const print = useReactToPrint({
-    contentRef,
-    documentTitle: "label-sheet",
-    pageStyle: `
+const clampMargin = (value: number): number =>
+  Number.isFinite(value) && value > 0 ? value : 0;
+
+export const usePrintSheet = ({
+  contentRef,
+  marginMmTop,
+  marginMmRight,
+  marginMmBottom,
+  marginMmLeft,
+}: UsePrintSheetOptions): (() => void) => {
+  const top = clampMargin(marginMmTop);
+  const right = clampMargin(marginMmRight);
+  const bottom = clampMargin(marginMmBottom);
+  const left = clampMargin(marginMmLeft);
+
+  const pageStyle = useMemo(
+    () => `
       @page {
         size: A4;
-        margin: 0;
+        margin: ${top}mm ${right}mm ${bottom}mm ${left}mm;
       }
       @media print {
         body {
@@ -26,11 +41,16 @@ export const usePrintSheet = ({ contentRef }: UsePrintSheetOptions): (() => void
         }
       }
     `,
+    [top, right, bottom, left]
+  );
+
+  const print = useReactToPrint({
+    contentRef,
+    documentTitle: "label-sheet",
+    pageStyle,
   });
 
   return () => {
-    if (showPrintAdvisory()) {
-      void print();
-    }
+    void print();
   };
 };

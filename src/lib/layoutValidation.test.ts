@@ -11,7 +11,10 @@ describe("validateCustomLayout", () => {
       labelHeightMm: 50,
       hGapMm: 2,
       vGapMm: 2,
-      marginMm: 5,
+      marginMmLeft: 5,
+      marginMmRight: 5,
+      marginMmTop: 5,
+      marginMmBottom: 5,
     });
     expect(result.isValid).toBe(true);
   });
@@ -24,7 +27,10 @@ describe("validateCustomLayout", () => {
       labelHeightMm: 60,
       hGapMm: 2,
       vGapMm: 2,
-      marginMm: 5,
+      marginMmLeft: 5,
+      marginMmRight: 5,
+      marginMmTop: 5,
+      marginMmBottom: 5,
     });
     expect(result.isValid).toBe(false);
   });

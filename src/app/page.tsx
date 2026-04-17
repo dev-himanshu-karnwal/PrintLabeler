@@ -35,7 +35,14 @@ export default function Home() {
     }),
     [layout, cells]
   );
-  const printSheet = usePrintSheet({ contentRef: printSheetRef });
+  const layoutConfig = layout.kind === "preset" ? layout.preset : layout.custom;
+  const printSheet = usePrintSheet({
+    contentRef: printSheetRef,
+    marginMmTop: layoutConfig.marginMmTop,
+    marginMmRight: layoutConfig.marginMmRight,
+    marginMmBottom: layoutConfig.marginMmBottom,
+    marginMmLeft: layoutConfig.marginMmLeft,
+  });
 
   useEffect(() => {
     if (!supabase) return;

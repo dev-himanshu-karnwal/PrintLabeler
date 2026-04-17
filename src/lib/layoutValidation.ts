@@ -14,13 +14,9 @@ export const validateCustomLayout = (input: CustomLayoutInput): LayoutValidation
   const warnings: string[] = [];
 
   const widthUsedMm =
-    input.columns * input.labelWidthMm +
-    Math.max(0, input.columns - 1) * input.hGapMm +
-    2 * input.marginMm;
+    input.columns * input.labelWidthMm + Math.max(0, input.columns - 1) * input.hGapMm;
   const heightUsedMm =
-    input.rows * input.labelHeightMm +
-    Math.max(0, input.rows - 1) * input.vGapMm +
-    2 * input.marginMm;
+    input.rows * input.labelHeightMm + Math.max(0, input.rows - 1) * input.vGapMm;
 
   if (widthUsedMm > A4_WIDTH_MM) {
     errors.columns = "Layout exceeds A4 width (210mm).";
@@ -39,7 +35,10 @@ export const validateCustomLayout = (input: CustomLayoutInput): LayoutValidation
   if (input.labelHeightMm <= 0) errors.labelHeightMm = "Label height must be greater than 0.";
   if (input.hGapMm < 0) errors.hGapMm = "Horizontal gap cannot be negative.";
   if (input.vGapMm < 0) errors.vGapMm = "Vertical gap cannot be negative.";
-  if (input.marginMm < 0) errors.marginMm = "Margin cannot be negative.";
+  if (input.marginMmLeft < 0) errors.marginMmLeft = "Left margin cannot be negative.";
+  if (input.marginMmRight < 0) errors.marginMmRight = "Right margin cannot be negative.";
+  if (input.marginMmTop < 0) errors.marginMmTop = "Top margin cannot be negative.";
+  if (input.marginMmBottom < 0) errors.marginMmBottom = "Bottom margin cannot be negative.";
 
   return {
     isValid: Object.keys(errors).length === 0,

@@ -90,7 +90,10 @@ const seedLayout: SheetLayout = {
     labelHeightMm: 297,
     hGapMm: 0,
     vGapMm: 0,
-    marginMm: 0,
+    marginMmLeft: 0,
+    marginMmRight: 0,
+    marginMmTop: 0,
+    marginMmBottom: 0,
   },
 };
 

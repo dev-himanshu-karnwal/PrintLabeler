@@ -7,7 +7,10 @@ export type LayoutPreset = {
   columns: number;
   hGapMm: number;
   vGapMm: number;
-  marginMm: number;
+  marginMmLeft: number;
+  marginMmRight: number;
+  marginMmTop: number;
+  marginMmBottom: number;
 };
 
 export type CustomLayoutInput = {
@@ -17,7 +20,10 @@ export type CustomLayoutInput = {
   labelHeightMm: number;
   hGapMm: number;
   vGapMm: number;
-  marginMm: number;
+  marginMmLeft: number;
+  marginMmRight: number;
+  marginMmTop: number;
+  marginMmBottom: number;
 };
 
 export type SheetLayout =

@@ -13,7 +13,10 @@ type LayoutItem = {
   columns: number;
   hGapMm: number;
   vGapMm: number;
-  marginMm: number;
+  marginMmLeft: number;
+  marginMmRight: number;
+  marginMmTop: number;
+  marginMmBottom: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -53,9 +56,21 @@ const FIELD_META: Record<keyof LayoutForm, { label: string; description: string 
     label: "Vertical gap (mm)",
     description: "Space between labels from top to bottom.",
   },
-  marginMm: {
-    label: "Margin (mm)",
-    description: "Outer page margin around all labels.",
+  marginMmLeft: {
+    label: "Print margin left (mm)",
+    description: "Extra space on the left when printing only; not shown on the editor canvas.",
+  },
+  marginMmRight: {
+    label: "Print margin right (mm)",
+    description: "Extra space on the right when printing only; not shown on the editor canvas.",
+  },
+  marginMmTop: {
+    label: "Print margin top (mm)",
+    description: "Extra space at the top when printing only; not shown on the editor canvas.",
+  },
+  marginMmBottom: {
+    label: "Print margin bottom (mm)",
+    description: "Extra space at the bottom when printing only; not shown on the editor canvas.",
   },
 };
 
@@ -68,14 +83,21 @@ const EMPTY_FORM: LayoutForm = {
   columns: 4,
   hGapMm: 0,
   vGapMm: 0,
-  marginMm: 0,
+  marginMmLeft: 0,
+  marginMmRight: 0,
+  marginMmTop: 0,
+  marginMmBottom: 0,
 };
 
 const FORM_SECTIONS: Array<{ title: string; fields: Array<keyof LayoutForm> }> = [
   { title: "Identity", fields: ["code", "labelsPerSheet"] },
   { title: "Label Size", fields: ["labelWidthMm", "labelHeightMm"] },
   { title: "Grid", fields: ["rows", "columns"] },
-  { title: "Spacing", fields: ["hGapMm", "vGapMm", "marginMm"] },
+  { title: "Spacing", fields: ["hGapMm", "vGapMm"] },
+  {
+    title: "Print margins (print only)",
+    fields: ["marginMmLeft", "marginMmRight", "marginMmTop", "marginMmBottom"],
+  },
 ];
 
 export default function SheetLayoutsPage() {
@@ -268,7 +290,10 @@ export default function SheetLayoutsPage() {
                         columns: layout.columns,
                         hGapMm: layout.hGapMm,
                         vGapMm: layout.vGapMm,
-                        marginMm: layout.marginMm,
+                        marginMmLeft: layout.marginMmLeft,
+                        marginMmRight: layout.marginMmRight,
+                        marginMmTop: layout.marginMmTop,
+                        marginMmBottom: layout.marginMmBottom,
                       });
                     }}
                   >
@@ -278,6 +303,9 @@ export default function SheetLayoutsPage() {
                     </p>
                     <p className="text-xs text-slate-500">
                       Grid {layout.rows}x{layout.columns} • Gap {layout.hGapMm}/{layout.vGapMm}mm
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {`Print margins L/R/T/B: ${layout.marginMmLeft ?? 0}/${layout.marginMmRight ?? 0}/${layout.marginMmTop ?? 0}/${layout.marginMmBottom ?? 0} mm`}
                     </p>
                   </button>
                 );
