@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+body {
+  background: #eef2ff;
+  color: #0f172a;
+}
+
+::selection {
+  background: #c7d2fe;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    background: white;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    display: none !important;
+  }
+}

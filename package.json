@@ -26,12 +26,24 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "setup": "git config core.hooksPath .husky && echo '✅ Husky hooks configured!'"
+    "setup": "git config core.hooksPath .husky && echo '✅ Husky hooks configured!'",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.103.3",
+    "@tanstack/react-query": "^5.99.0",
+    "@tiptap/core": "^3.22.3",
+    "@tiptap/extension-color": "^3.22.3",
+    "@tiptap/extension-font-family": "^3.22.3",
+    "@tiptap/extension-text-align": "^3.22.3",
+    "@tiptap/extension-text-style": "^3.22.3",
+    "@tiptap/extension-underline": "^3.22.3",
+    "@tiptap/react": "^3.22.3",
+    "@tiptap/starter-kit": "^3.22.3",
     "next": "16.1.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -44,6 +56,7 @@
     "prettier": "^3",
     "prettier-plugin-tailwindcss": "^0.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^1.6.0"
   }
 }
