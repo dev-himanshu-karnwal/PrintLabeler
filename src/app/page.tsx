@@ -66,11 +66,24 @@ export default function Home() {
   }, [templatePayload]);
 
   useEffect(() => {
+    const isEditableShortcutTarget = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      if (target.isContentEditable) return true;
+      return Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
+    };
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "c") {
+      if (event.defaultPrevented || isEditableShortcutTarget(event.target)) return;
+
+      const isCopyShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "c";
+      const isPasteShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "v";
+
+      if (isCopyShortcut) {
+        event.preventDefault();
         copySelected();
       }
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "v") {
+      if (isPasteShortcut) {
+        event.preventDefault();
         pasteToSelected();
       }
     };
